@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VTTCommonParameters.Dal;
-using VTTCommonParameters.Dal.Entities;
+using VTTCommonParameters.Dal.Entities.AppEntities;
 
 namespace VTTCommonParameters.Repository.Repositories
 {

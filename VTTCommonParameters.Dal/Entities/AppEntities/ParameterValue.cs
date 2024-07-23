@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace VTTCommonParameters.Dal.Entities
+namespace VTTCommonParameters.Dal.Entities.AppEntities
 {
     public class ParameterValue
     {

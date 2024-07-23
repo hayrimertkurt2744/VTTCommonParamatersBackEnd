@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using VTTCommonParameters.Dal.Entities;
+using VTTCommonParameters.Dal.Entities.AccountEntities;
+using VTTCommonParameters.Dal.Entities.AppEntities;
 
 namespace VTTCommonParameters.Dal
 {
@@ -16,6 +17,8 @@ namespace VTTCommonParameters.Dal
         public DbSet<Page> Pages { get; set; }
         public DbSet<Parameter> Parameters { get; set; }
         public DbSet<ParameterValue> ParameterValues { get; set; }
+
+        public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

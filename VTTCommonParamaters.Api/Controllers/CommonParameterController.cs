@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using VTTCommonParameters.Dal.Entities;
+using VTTCommonParameters.Dal.Entities.AppEntities;
 using VTTCommonParameters.Repository.Repositories;
 
 namespace VTTCommonParamaters.Api.Controllers
