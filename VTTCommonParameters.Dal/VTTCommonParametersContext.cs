@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using VTTCommonParameters.Dal.Entities;
+
+namespace VTTCommonParameters.Dal
+{
+    public class VTTCommonParametersContext : DbContext
+    {
+
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<Page> Pages { get; set; }
+        public DbSet<Parameter> Parameters { get; set; }
+        public DbSet<ParameterValue> ParameterValues { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Server=.;Database=VTTCommonParametersDB;UID=sa;PWD=123;TrustServerCertificate=True;");
+            }
+        }
+    }
+}
