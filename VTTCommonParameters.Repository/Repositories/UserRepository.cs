@@ -14,21 +14,17 @@ using System.Text;
 using System.Threading.Tasks;
 using VTTCommonParameters.Dal;
 using VTTCommonParameters.Dal.Entities.AccountEntities;
+using VTTCommonParameters.Repository.Dto;
 
 namespace VTTCommonParameters.Repository.Repositories
 {
     public class UserRepository
     {
         private readonly VTTCommonParametersContext _context;
-        private readonly IConfiguration _configuration;
-        public UserRepository(IConfiguration configuration)
-        {
-            _context = new VTTCommonParametersContext();
-            _configuration = configuration;
-        }
         public UserRepository()
         {
             _context = new VTTCommonParametersContext();
+
         }
 
 
@@ -39,7 +35,7 @@ namespace VTTCommonParameters.Repository.Repositories
 
             if (userMail == null)
             {
-             
+
                 string passwordHash = BCrypt.Net.BCrypt.HashPassword(registerUser.Password);
                 registerUser.Password = passwordHash;
 
@@ -52,35 +48,46 @@ namespace VTTCommonParameters.Repository.Repositories
             return "Email Exists! Please register with a valid Email.";
 
         }
-        public string UserLogin(User loginUser) {
+        public ResponseModel UserLogin(string email, string password,SymmetricSecurityKey key)
+        {
+            ResponseModel response = new ResponseModel();
 
             var userMail = _context.Users
-                .FirstOrDefault(x => x.Email == loginUser.Email);
+                .FirstOrDefault(x => x.Email == email);
 
-            var userHashedPassword=userMail?.Password;
+            var userHashedPassword = userMail?.Password;
 
-            if (userMail == null) { 
-
-                return "No such user."; 
-            }
-            if (!BCrypt.Net.BCrypt.Verify(loginUser.Password, userHashedPassword))
+            if (userMail == null)
             {
-                return "Wrong Password!";
+                response.Result = false;
+                response.ErrorMessge =  "No user.";
+                return response;
             }
-
-            return "Ok";
+            if (!BCrypt.Net.BCrypt.Verify(password, userHashedPassword))
+            {
+                response.Result = false;
+                response.ErrorMessge = "No pwd match.";
+                return response;
+            }
+            string token = RefreshToken(email,key);
+            response.Data = token;
+            return response;
         }
 
-        private string CreateToken(User user)
+        private string RefreshToken(string email, SymmetricSecurityKey key)
         {
+
+
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, "Admin")
+                new Claim(ClaimTypes.Email, email),
+                //new Claim(ClaimTypes.Role, "Admin")
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value!));
+            //You cant generate key here. IConfiguration can only be used in main API.
+
+            //var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+            //    _configuration.GetSection("AppSettings:Token").Value!));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
