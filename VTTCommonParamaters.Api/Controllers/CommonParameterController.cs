@@ -21,7 +21,7 @@ namespace VTTCommonParamaters.Api.Controllers
             return response;
         }
 
-        [HttpGet("GetAllPages"), Authorize(Roles ="Admin")]
+        [HttpGet("GetAllPages")/*, Authorize(Roles ="Admin")*/]
         public string GetAllPages()
         {
             GeneralRepository repository = new GeneralRepository();

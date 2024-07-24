@@ -17,8 +17,9 @@ namespace VTTCommonParameters.Dal
         public DbSet<Page> Pages { get; set; }
         public DbSet<Parameter> Parameters { get; set; }
         public DbSet<ParameterValue> ParameterValues { get; set; }
-
         public DbSet<User> Users { get; set; }
+       
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

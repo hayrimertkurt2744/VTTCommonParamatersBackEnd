@@ -48,33 +48,70 @@ namespace VTTCommonParameters.Repository.Repositories
             return "Email Exists! Please register with a valid Email.";
 
         }
-        public ResponseModel UserLogin(string email, string password,SymmetricSecurityKey key)
+        public ResponseModel UserLogin(string email, string password, SymmetricSecurityKey key)
         {
             ResponseModel response = new ResponseModel();
 
-            var userMail = _context.Users
-                .FirstOrDefault(x => x.Email == email);
-
-            var userHashedPassword = userMail?.Password;
+            var userMail = _context.Users.FirstOrDefault(x => x.Email == email);
 
             if (userMail == null)
             {
                 response.Result = false;
-                response.ErrorMessge =  "No user.";
+                response.ErrorMessge = "No user.";
+                response.Data = "";
                 return response;
             }
+
+            var userHashedPassword = userMail.Password;
+
             if (!BCrypt.Net.BCrypt.Verify(password, userHashedPassword))
             {
                 response.Result = false;
                 response.ErrorMessge = "No pwd match.";
+                response.Data = "";
                 return response;
             }
-            string token = RefreshToken(email,key);
-            response.Data = token;
+
+            var existingToken = _context.RefreshTokens.FirstOrDefault(x => x.UserId == userMail.Id);
+
+            if (existingToken == null || existingToken.Expires < DateTime.Now)
+            {
+                // Token doesn't exist or is expired, generate a new token
+                string token = GenerateToken(email, key);
+                var refreshToken = new RefreshToken
+                {
+                    Token = token,
+                    UserId = userMail.Id,
+                    Expires = DateTime.Now.AddMinutes(30), // Set your token expiration time here
+                    Created = DateTime.Now
+                };
+
+                _context.RefreshTokens.Add(refreshToken);
+                _context.SaveChanges();
+
+                response.Data = refreshToken.Token;
+            }
+            else if (existingToken.Expires > DateTime.Now)
+            {
+                // Token exists and is not expired
+                response.Data = existingToken.Token;
+
+                var repeatToken = new RefreshToken
+                {
+                    Token = existingToken.Token,
+                    UserId = userMail.Id,
+                    Expires = existingToken.Expires, // Set your token expiration time here
+                    Created = DateTime.Now
+                };
+                _context.RefreshTokens.Add(repeatToken);
+                _context.SaveChanges();
+            }
+
+            response.Result = true;
             return response;
         }
 
-        private string RefreshToken(string email, SymmetricSecurityKey key)
+        private string GenerateToken(string email, SymmetricSecurityKey key)
         {
 
 
@@ -93,7 +130,7 @@ namespace VTTCommonParameters.Repository.Repositories
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds
             );
 

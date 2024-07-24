@@ -3,7 +3,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using VTTCommonParamaters.Api.Models;
 using VTTCommonParameters.Dal.Entities.AccountEntities;
 using VTTCommonParameters.Repository;
 using VTTCommonParameters.Repository.Dto;

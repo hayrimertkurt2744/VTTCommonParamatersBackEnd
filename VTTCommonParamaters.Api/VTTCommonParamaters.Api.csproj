@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VTTCommonParameters.Dal\VTTCommonParameters.Dal.csproj" />
     <ProjectReference Include="..\VTTCommonParameters.Repository\VTTCommonParameters.Repository.csproj" />
   </ItemGroup>
 
