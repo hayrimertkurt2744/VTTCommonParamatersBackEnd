@@ -130,6 +130,7 @@ namespace VTTCommonParameters.Repository.Repositories
             int rowId = _context.ParameterValues.Max(x => x.RowId) +1;
             parameterValues.ForEach(x => x.RowId = rowId);
 
+
             _context.ParameterValues.AddRange(parameterValues);
             _context.SaveChanges();
         }   

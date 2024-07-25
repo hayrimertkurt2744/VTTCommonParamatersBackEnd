@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+
 using VTTCommonParameters.Dal.Entities.AccountEntities;
 using VTTCommonParameters.Repository;
 using VTTCommonParameters.Repository.Dto;
@@ -26,7 +27,7 @@ namespace VTTCommonParamaters.Api.Controllers
             _configuration= configuration;
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public ActionResult<User> Register(User user)
         {
             UserRepository repository=new UserRepository();
@@ -35,7 +36,7 @@ namespace VTTCommonParamaters.Api.Controllers
             return Ok(new { message= response });
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public ActionResult<string> Login(string email, string password)
         {
 

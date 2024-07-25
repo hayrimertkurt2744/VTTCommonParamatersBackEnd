@@ -7,7 +7,7 @@ using VTTCommonParameters.Repository.Repositories;
 
 namespace VTTCommonParamaters.Api.Controllers
 {
-
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
 

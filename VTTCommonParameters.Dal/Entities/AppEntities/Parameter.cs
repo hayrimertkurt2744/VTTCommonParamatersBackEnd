@@ -10,6 +10,7 @@ namespace VTTCommonParameters.Dal.Entities.AppEntities
         public int OrderId { get; set; }
         public string Type { get; set; }
         public string? DefaultValue { get; set; }
+        public bool IsUnique { get; set; }
 
         [ForeignKey("PageId")]
         public Page Page { get; set; }
