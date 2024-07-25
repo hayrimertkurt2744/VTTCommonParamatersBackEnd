@@ -127,9 +127,30 @@ namespace VTTCommonParameters.Repository.Repositories
         }
         public void AddData(List<ParameterValue> parameterValues)
         {
-            int rowId = _context.ParameterValues.Max(x => x.RowId) +1;
-            parameterValues.ForEach(x => x.RowId = rowId);
 
+            var pageId = _context.Parameters.FirstOrDefault(x => x.Id == parameterValues[0].ParameterId)?.PageId ?? throw new Exception("PageId not found");
+            var pageUniqueParams = _context.Parameters
+                .Where(x => x.PageId == pageId && x.IsUnique == true)
+                .ToList();
+
+            foreach (var pageUniqueParam in pageUniqueParams)
+            {
+                var paramValueToCheck = parameterValues.FirstOrDefault(a => a.ParameterId == pageUniqueParam.Id);
+
+                if (paramValueToCheck != null)
+                {
+                    var existingParamValue = _context.ParameterValues
+                        .FirstOrDefault(x => x.ParameterId == pageUniqueParam.Id && x.Value == paramValueToCheck.Value);
+
+                    if (existingParamValue != null)
+                    {
+                        throw new Exception("Data already exists");
+                    }
+                }
+            }
+
+            int rowId = (_context.ParameterValues.Max(x => (int?)x.RowId) ?? 0) + 1;
+            parameterValues.ForEach(x => x.RowId = rowId);
 
             _context.ParameterValues.AddRange(parameterValues);
             _context.SaveChanges();
