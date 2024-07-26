@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VTTCommonParameters.Dal.DBWriteTest
+namespace VTTCommonParameters.Dal.DBReadWriteTest
 {
     public class DBWrite
     {

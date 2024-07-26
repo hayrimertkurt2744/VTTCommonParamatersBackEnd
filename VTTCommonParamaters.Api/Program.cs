@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using VTTCommonParameters.Dal.DBReadWriteTest;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -68,5 +69,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+DBRead dBRead = new DBRead();
+dBRead.ReadExcelData("C:/Users/90542/Desktop/Test.xlsx");
 
 app.Run();
