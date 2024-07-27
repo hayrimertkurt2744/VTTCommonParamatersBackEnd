@@ -6,7 +6,7 @@ namespace VTTCommonParameters.Dal.Entities.AppEntities
     {
         public int Id { get; set; }
         public int ParameterId { get; set; }
-        public string Value { get; set; }
+        public string? Value { get; set; }
         public int RowId { get; set; }
 
         [ForeignKey("ParameterId")]

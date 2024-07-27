@@ -8,11 +8,11 @@ namespace VTTCommonParameters.Dal.Entities.AppEntities
         public int PageId { get; set; }
         public string ColumnName { get; set; }
         public int OrderId { get; set; }
-        public string Type { get; set; }
+        public string? Type { get; set; }
         public string? DefaultValue { get; set; }
-        public bool IsUnique { get; set; }
+        public bool? IsUnique { get; set; }
 
         [ForeignKey("PageId")]
-        public Page Page { get; set; }
+        public Page? Page { get; set; }
     }
 }

@@ -12,7 +12,7 @@ using VTTCommonParameters.Dal;
 namespace VTTCommonParameters.Dal.Migrations
 {
     [DbContext(typeof(VTTCommonParametersContext))]
-    [Migration("20240725070430_InitialCreate")]
+    [Migration("20240726132235_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -119,7 +119,7 @@ namespace VTTCommonParameters.Dal.Migrations
                     b.Property<string>("DefaultValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsUnique")
+                    b.Property<bool?>("IsUnique")
                         .HasColumnType("bit");
 
                     b.Property<int>("OrderId")
@@ -129,7 +129,6 @@ namespace VTTCommonParameters.Dal.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

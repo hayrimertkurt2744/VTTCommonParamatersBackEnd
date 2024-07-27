@@ -91,9 +91,9 @@ namespace VTTCommonParameters.Dal.Migrations
                     PageId = table.Column<int>(type: "int", nullable: false),
                     ColumnName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DefaultValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsUnique = table.Column<bool>(type: "bit", nullable: false)
+                    IsUnique = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
