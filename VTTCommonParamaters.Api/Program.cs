@@ -71,6 +71,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 DBRead dBRead = new DBRead();
-dBRead.ReadExcelData("C:/Users/90542/Desktop/Test.xlsx");
+dBRead.ReadExcelData("C:/Users/90542/Desktop/Test2.xlsx");
 
 app.Run();

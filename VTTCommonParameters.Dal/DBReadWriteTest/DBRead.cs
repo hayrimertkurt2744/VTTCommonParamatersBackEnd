@@ -41,6 +41,8 @@ namespace VTTCommonParameters.Dal.DBReadWriteTest
                     orderId++;
                     if (rowId==0)
                     {
+                        //This if should check whether db has the parameter recorded on the Parameters table.
+
                         Console.WriteLine($"OrderID:{orderId} ParamID:{paramId} Row:{rowId} Value:{kvp.Value} ");
                         //Parameter parameter = new Parameter { PageId=1, ColumnName = kvp.Value.ToString(), OrderId = orderId, DefaultValue = kvp.Value.ToString() };
                         //_context.Parameters.AddRange(parameter);
@@ -48,27 +50,25 @@ namespace VTTCommonParameters.Dal.DBReadWriteTest
                     }
                     else
                     {
-                        Console.WriteLine($"ParamID:{paramId} Row:{rowId} Value:{kvp.Value} ");
-                        //_context.ParameterValues.Add(new ParameterValue { ParameterId = paramId, RowId = rowId, Value = kvp.Value.ToString() });
-                        ParameterValue parameterValue = new ParameterValue 
-                        {   ParameterId = paramId, 
-                            RowId = rowId, 
-                            Value = kvp.Value.ToString() 
+                        var value = kvp.Value ?? "NULL";
+
+                        Console.WriteLine($"ParamID:{paramId} Row:{rowId} Value:{value} ");
+
+                        ParameterValue parameterValue = new ParameterValue
+                        {
+                            ParameterId = paramId,
+                            RowId = rowId,
+                            Value = value.ToString()
                         };
-                        
+
                         _context.ParameterValues.AddRange(parameterValue);
                         _context.SaveChanges();
                     }
-                    
 
                 }
                 Console.WriteLine(); // For separating rows in output
-                rowId++;
-                
-
+                rowId++;   
             }
-
         }
-
     }
 }
