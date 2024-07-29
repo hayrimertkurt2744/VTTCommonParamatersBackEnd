@@ -150,7 +150,6 @@ namespace VTTCommonParameters.Dal.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

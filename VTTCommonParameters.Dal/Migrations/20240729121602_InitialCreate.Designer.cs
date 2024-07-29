@@ -12,7 +12,7 @@ using VTTCommonParameters.Dal;
 namespace VTTCommonParameters.Dal.Migrations
 {
     [DbContext(typeof(VTTCommonParametersContext))]
-    [Migration("20240726132235_InitialCreate")]
+    [Migration("20240729121602_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -153,7 +153,6 @@ namespace VTTCommonParameters.Dal.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

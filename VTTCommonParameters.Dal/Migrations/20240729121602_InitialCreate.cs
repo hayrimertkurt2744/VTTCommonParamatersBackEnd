@@ -113,7 +113,7 @@ namespace VTTCommonParameters.Dal.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ParameterId = table.Column<int>(type: "int", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RowId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

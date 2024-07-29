@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MiniExcelLibs;
-using System.IO;
+﻿using MiniExcelLibs;
 using System.Data;
-using System.Reflection.Metadata;
 using VTTCommonParameters.Dal.Entities.AppEntities;
 using Parameter = VTTCommonParameters.Dal.Entities.AppEntities.Parameter;
 
@@ -16,6 +9,7 @@ namespace VTTCommonParameters.Dal.DBReadWriteTest
     {
         private readonly VTTCommonParametersContext _context;
 
+
         public DBRead()
         {
             _context = new VTTCommonParametersContext();
@@ -23,52 +17,115 @@ namespace VTTCommonParameters.Dal.DBReadWriteTest
 
         public void ReadExcelData(string filePath)
         {
-            //_context.Projects.Add(new Project { Name = "Project1" });
-            //_context.SaveChanges();
-            //Page page = new Page { ProjectId=1,Name="Authorizations"};
-            //_context.Pages.Add(page);
-            //_context.SaveChanges();
+            int pageId = 1;
+            int pageParamId = 1;
 
-            var rows = MiniExcel.Query(filePath).ToList();
-            int rowId = 0;
-            foreach (var row in rows)
+            // Add Project
+
+            Project project = new Project { Name = "Project1" };
+            _context.Projects.Add(project);
+
+            _context.SaveChanges();
+            Console.WriteLine($"New Project:Project 1 ");
+
+            // Get sheet names. Create pages based on these sheet names.
+            var sheetNames = MiniExcel.GetSheetNames(filePath);
+            //foreach (var sheetName in sheetNames)
+            //{
+
+            //    Console.WriteLine($"Project 1's New Page:{sheetName} ");
+
+            //}
+            ////_context.SaveChanges();
+
+            foreach (var sheetName in sheetNames)
             {
-                int paramId = _context.Parameters.Min(x => x.Id)-1;
-                int orderId = 0;
-                var rowDict = (IDictionary<string, object>)row;
-                foreach (var kvp in rowDict)
-                {   paramId++;
-                    orderId++;
-                    if (rowId==0)
+                List<Parameter> pageParams = new List<Parameter>();
+                Page page = new Page { ProjectId = project.Id, Name = sheetName };
+                _context.Pages.Add(page);
+                _context.SaveChanges();
+
+
+                // Based on current pageId, get the rows of the current page.
+                var rows = MiniExcel.Query(filePath, sheetName: sheetName).Where(x => !string.IsNullOrWhiteSpace(x.B)).ToList();
+                int rowId = 0;
+                int currentParamId = pageParamId;
+
+                // Iterate over the rows and columns of the current page.
+                foreach (var row in rows)
+                {
+                    int index = 0;
+                    int orderId = 0;
+
+                    var rowDict = (IDictionary<string, object>)row;
+                    var keysToRemove = rowDict.Where(kv => kv.Value == null).Select(kv => kv.Key).ToList();
+
+                    if (keysToRemove != null)
                     {
-                        //This if should check whether db has the parameter recorded on the Parameters table.
-
-                        Console.WriteLine($"OrderID:{orderId} ParamID:{paramId} Row:{rowId} Value:{kvp.Value} ");
-                        //Parameter parameter = new Parameter { PageId=1, ColumnName = kvp.Value.ToString(), OrderId = orderId, DefaultValue = kvp.Value.ToString() };
-                        //_context.Parameters.AddRange(parameter);
-                        //_context.SaveChanges();
-                    }
-                    else
-                    {
-                        var value = kvp.Value ?? "NULL";
-
-                        Console.WriteLine($"ParamID:{paramId} Row:{rowId} Value:{value} ");
-
-                        ParameterValue parameterValue = new ParameterValue
+                        foreach (var key in keysToRemove)
                         {
-                            ParameterId = paramId,
-                            RowId = rowId,
-                            Value = value.ToString()
-                        };
-
-                        _context.ParameterValues.AddRange(parameterValue);
-                        _context.SaveChanges();
+                            rowDict.Remove(key);
+                        }
                     }
+
+                    foreach (var kvp in rowDict)
+                    {
+                        if (rowId == 0)
+                        {
+                            Parameter parameter = new Parameter
+                            {
+                                PageId = page.Id,
+                                ColumnName = kvp.Value.ToString(),
+                                OrderId = orderId,
+                                IsUnique = false
+                            };
+
+                            pageParams.Add(parameter);
+                            _context.Parameters.Add(parameter);
+                            _context.SaveChanges();
+                            // Remove the collected keys from the dictionary
+
+
+                            orderId++;
+
+                        }
+
+                        else
+                        {
+                            var value = kvp.Value ?? "NULL";
+                            var curerntPageParam = pageParams[index];
+                            //if (curerntPageParam.Id==8)
+                            //{
+
+                            //}
+                            ParameterValue parameterValue = new ParameterValue
+                            {
+                                ParameterId = curerntPageParam.Id,
+                                Value = value.ToString(),
+                                RowId = rowId
+                            };
+
+
+                            _context.ParameterValues.Add(parameterValue);
+                            _context.SaveChanges();
+
+                            Console.WriteLine($"PageId:{page.Id} ParameterId:{curerntPageParam.Id} Value:{value} RowId:{rowId} ");
+
+                        }
+                        if (index < pageParams.Count - 1)
+                        {
+                            index++;
+                        }
+
+                    }
+                    rowId++;
+
+                    Console.WriteLine(); // For separating rows in output
 
                 }
-                Console.WriteLine(); // For separating rows in output
-                rowId++;   
             }
+
         }
     }
+
 }
