@@ -70,7 +70,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-DBRead dBRead = new DBRead();
-dBRead.ReadExcelData("C:/Users/90542/Desktop/Common Parameters.xlsx");
+//DBRead dBRead = new DBRead();
+//dBRead.ReadExcelData("C:/Users/90542/Desktop/Common Parameters.xlsx");
 
 app.Run();
