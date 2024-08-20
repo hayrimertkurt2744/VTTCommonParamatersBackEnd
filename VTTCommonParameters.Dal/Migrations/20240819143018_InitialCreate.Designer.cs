@@ -12,7 +12,7 @@ using VTTCommonParameters.Dal;
 namespace VTTCommonParameters.Dal.Migrations
 {
     [DbContext(typeof(VTTCommonParametersContext))]
-    [Migration("20240729121602_InitialCreate")]
+    [Migration("20240819143018_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

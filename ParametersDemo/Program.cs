@@ -6,7 +6,7 @@ using VTTCommonParameters.Repository.Repositories;
 
 using (var context = new VTTCommonParametersContext())
 {
-    var repo= new GeneralRepository(context);
-    var pages=repo.GetAllPages();
+    //var repo= new GeneralRepository(context);
+    //var pages=repo.GetAllPages();
 
 }

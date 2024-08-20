@@ -25,7 +25,7 @@ namespace VTTCommonParameters.Dal
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=.;Database=VTTCommonParametersDB;UID=sa;PWD=123;TrustServerCertificate=True;");
+                optionsBuilder.UseSqlServer("Server=HAYRIKURTNB;Database=VTTCommonParametersDB;TrustServerCertificate=True;Trusted_Connection=True;");
             }
         }
     }
